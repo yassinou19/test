@@ -29,6 +29,12 @@ public class TestService : ITestService
         return existing;
     }
 
+
+    private string GenerateFromInt(int number)
+    {
+        return $"{number}";
+    }
+
     public bool Delete(int id) => _items.RemoveAll(i => i.Id == id) > 0;
 
     public TestItem Switch(string a)
@@ -36,14 +42,15 @@ public class TestService : ITestService
         switch (a)
         {
             case "0":
-                Console.WriteLine("0");
+                GenerateFromInt(0);
                 break;
 
             case "1":
-                Console.WriteLine("1");
+                GenerateFromInt(1);
                 break;
 
             default:
+                GenerateFromInt(99);
                 Console.WriteLine("Valeur inconnue");
                 break;
         }
