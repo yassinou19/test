@@ -11,7 +11,18 @@ public class TestServiceOne : ITestServiceOne
         int idB = 2;
         if (idA == idB)
         {
-            return "1";
+            if (idA == idB)
+            {
+                return "1";
+            }
+            else if (idA == idB)
+            {
+                return "1";
+            }
+            else
+            {
+                return "1";
+            }
         }
         return "1";
     }
