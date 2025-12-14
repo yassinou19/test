@@ -7,6 +7,12 @@ public class TestService : ITestService
 {
     private readonly List<TestItem> _items = new();
     private int _nextId = 1;
+    private readonly ITestServiceOne _testServiceOne;
+
+    public TestService(ITestServiceOne testServiceOne)
+    {
+        _testServiceOne = testServiceOne;
+    }
 
     public IEnumerable<TestItem> GetAll() => _items;
 
@@ -37,7 +43,7 @@ public class TestService : ITestService
 
     public bool Delete(int id) => _items.RemoveAll(i => i.Id == id) > 0;
 
-    public TestItem Switch(string a)
+    public string Switch(string a)
     {
         switch (a)
         {
@@ -50,11 +56,10 @@ public class TestService : ITestService
                 break;
 
             default:
-                GenerateFromInt(99);
+                _testServiceOne.GetOne();
                 Console.WriteLine("Valeur inconnue");
                 break;
         }
-
-        return this;
+        return "Rien";
     }
 }
