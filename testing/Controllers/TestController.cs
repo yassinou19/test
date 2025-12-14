@@ -25,6 +25,13 @@ public class TestController : ControllerBase
         return item != null ? Ok(item) : NotFound();
     }
 
+    [HttpGet("switch/{a}")]
+    public IActionResult Switch(string a)
+    {
+        var item = _testService.Switch(a);
+        return item != null ? Ok(item) : NotFound();
+    }
+
     [HttpPost]
     public IActionResult Create([FromBody] TestItem item) => Ok(_testService.Create(item));
 

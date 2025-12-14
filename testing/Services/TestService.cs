@@ -30,4 +30,24 @@ public class TestService : ITestService
     }
 
     public bool Delete(int id) => _items.RemoveAll(i => i.Id == id) > 0;
+
+    public TestItem Switch(string a)
+    {
+        switch (a)
+        {
+            case "0":
+                Console.WriteLine("0");
+                break;
+
+            case "1":
+                Console.WriteLine("1");
+                break;
+
+            default:
+                Console.WriteLine("Valeur inconnue");
+                break;
+        }
+
+        return this;
+    }
 }
