@@ -7,17 +7,27 @@ public class TestServiceOne : ITestServiceOne
 {
     public string GetOne()
     {
+        List<int> collection = new List<int>(10);
         int idA = 1;
         int idB = 2;
         if (idA == idB)
         {
             if (idA == idB)
             {
+                foreach (var item in collection)
+                {
+                    Console.WriteLine("OK");
+
+                    if (item > 10)
+                    {
+                        break;
+                    }
+                }
                 return "1";
             }
             else if (idA == idB)
             {
-                return "1";
+                throw new Exception("CustomException");
             }
             else
             {
