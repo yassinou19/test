@@ -5,6 +5,18 @@ namespace testing.Services;
 
 public class OrderNotificationListener : IListener<Order>
 {
+    public void OnClose(Order order)
+    {
+        // Loop example
+        foreach (var item in order.Items)
+        {
+            if (item.Quantity > 10)
+            {
+                Console.WriteLine($"Bulk item detected: Product {item.ProductId}");
+            }
+        }
+    }
+
     public void OnNotify(Order order)
     {
         // Adding more control flows for the CLI scanner
