@@ -8,6 +8,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<testing.Interfaces.IListener<testing.Models.Order>, testing.Services.OrderNotificationListener>();
 
 var app = builder.Build();
 
