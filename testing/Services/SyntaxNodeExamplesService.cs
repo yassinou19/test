@@ -165,4 +165,64 @@ public class SyntaxNodeExamplesService : ISyntaxNodeExamplesService
         Func<int, int> increment = x => x + 1;
         return $"Value: {increment(7)}";
     }
+
+    public string SwitchExpressionExample(int value)
+    {
+        var result = value switch
+        {
+            0 => "Zero",
+            1 => "One",
+            _ => "Other"
+        };
+
+        return result;
+    }
+
+    public string BreakContinueLoopExample(int[] items)
+    {
+        var output = new List<string>();
+
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i] < 0) continue;
+            if (items[i] == 0) break;
+            output.Add($"Processed {items[i]}");
+        }
+
+        output.Add("After");
+        return string.Join(" | ", output);
+    }
+
+    public string SwitchFallthroughGotoExample(int value)
+    {
+        var output = new List<string>();
+
+        switch (value)
+        {
+            case 0:
+                output.Add("A");
+                goto case 1;
+            case 1:
+                output.Add("B");
+                break;
+            case 2:
+                output.Add("C");
+                goto case 1;
+            default:
+                output.Add("D");
+                break;
+        }
+
+        output.Add("E");
+        return string.Join("", output);
+    }
+
+    public string TaskWhenAllExample()
+    {
+        Task A() => Task.CompletedTask;
+        Task B() => Task.CompletedTask;
+
+        Task.WhenAll(A(), B()).GetAwaiter().GetResult();
+        return "After";
+    }
 }

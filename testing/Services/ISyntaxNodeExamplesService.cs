@@ -28,4 +28,9 @@ public interface ISyntaxNodeExamplesService
     string AnonymousMethodExpressionExample();
     string ParenthesizedLambdaExpressionExample();
     string SimpleLambdaExpressionExample();
+
+    string SwitchExpressionExample(int value);
+    string BreakContinueLoopExample(int[] items);
+    string SwitchFallthroughGotoExample(int value);
+    string TaskWhenAllExample();
 }

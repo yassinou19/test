@@ -85,4 +85,20 @@ public class SyntaxNodeExamplesController : ControllerBase
     [HttpGet("lambda/simple")]
     public IActionResult SimpleLambdaExpressionExample()
         => Ok(_examplesService.SimpleLambdaExpressionExample());
+
+    [HttpGet("switch-expression/{value:int}")]
+    public IActionResult SwitchExpressionExample(int value)
+        => Ok(_examplesService.SwitchExpressionExample(value));
+
+    [HttpPost("break-continue")]
+    public IActionResult BreakContinueLoopExample([FromBody] int[] items)
+        => Ok(_examplesService.BreakContinueLoopExample(items));
+
+    [HttpGet("switch-fallthrough/{value:int}")]
+    public IActionResult SwitchFallthroughGotoExample(int value)
+        => Ok(_examplesService.SwitchFallthroughGotoExample(value));
+
+    [HttpGet("task-when-all")]
+    public IActionResult TaskWhenAllExample()
+        => Ok(_examplesService.TaskWhenAllExample());
 }
