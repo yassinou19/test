@@ -1,0 +1,168 @@
+using System.Collections.Generic;
+using System.IO;
+
+namespace testing.Services;
+
+public class SyntaxNodeExamplesService : ISyntaxNodeExamplesService
+{
+    private static readonly object _gate = new();
+
+    public string GotoStatementExample1()
+    {
+        int i = 0;
+        var output = new List<string>();
+
+    start:
+        i++;
+        if (i < 3)
+        {
+            output.Add($"Loop {i}");
+            goto start;
+        }
+
+        output.Add("Fin");
+        return string.Join(" | ", output);
+    }
+
+    public string GotoStatementExample2()
+    {
+        int remaining = 2;
+        var output = new List<string>();
+
+    retry:
+        output.Add($"Remaining: {remaining}");
+        remaining--;
+        if (remaining >= 0)
+        {
+            goto retry;
+        }
+
+        return string.Join(", ", output);
+    }
+
+    public string LabeledStatementExample1()
+    {
+        var output = new List<string>();
+
+    label_one:
+        output.Add("Reached label_one");
+        return string.Join(", ", output);
+    }
+
+    public string LabeledStatementExample2()
+    {
+        var output = new List<string>();
+
+    label_two:
+        output.Add("Reached label_two");
+        return string.Join(", ", output);
+    }
+
+    public string LocalFunctionStatementExample1()
+    {
+        int Add(int a, int b) => a + b;
+        return $"Sum: {Add(2, 3)}";
+    }
+
+    public string LocalFunctionStatementExample2()
+    {
+        string Format(string name) => $"Hello {name}";
+        return Format("World");
+    }
+
+    public string LockStatementExample1()
+    {
+        int counter = 0;
+        lock (_gate)
+        {
+            counter++;
+        }
+        return $"Counter: {counter}";
+    }
+
+    public string LockStatementExample2()
+    {
+        var result = "";
+        lock (_gate)
+        {
+            result = "Locked section executed";
+        }
+        return result;
+    }
+
+    public string ThrowExpressionExample1(string? input)
+    {
+        var value = input ?? throw new ArgumentNullException(nameof(input));
+        return $"Value: {value}";
+    }
+
+    public string ThrowExpressionExample2(string? input)
+    {
+        return input ?? throw new InvalidOperationException("Input cannot be null");
+    }
+
+    public string UsingStatementExample1()
+    {
+        using (var stream = new MemoryStream())
+        {
+            stream.WriteByte(1);
+            return $"Length: {stream.Length}";
+        }
+    }
+
+    public string UsingStatementExample2()
+    {
+        using (var stream = new MemoryStream())
+        {
+            stream.WriteByte(2);
+            stream.WriteByte(3);
+            return $"Length: {stream.Length}";
+        }
+    }
+
+    public string UsingDeclarationExample()
+    {
+        using var stream = new MemoryStream();
+        stream.WriteByte(9);
+        return $"Length: {stream.Length}";
+    }
+
+    public IEnumerable<int> YieldStatementExample1()
+    {
+        yield return 1;
+        yield return 2;
+        yield return 3;
+    }
+
+    public IEnumerable<int> YieldStatementExample2()
+    {
+        for (var i = 0; i < 2; i++)
+        {
+            yield return i;
+        }
+
+        yield break;
+    }
+
+    public string AnonymousMethodExpressionExample()
+    {
+        Func<int, int> doubleValue = delegate (int x)
+        {
+            return x * 2;
+        };
+
+        return $"Result: {doubleValue(4)}";
+    }
+
+    public string ParenthesizedLambdaExpressionExample()
+    {
+        Func<int, int, int> add = (int a, int b) => a + b;
+        return $"Sum: {add(3, 5)}";
+    }
+
+    public string SimpleLambdaExpressionExample()
+    {
+        Func<int, int> increment = x => x + 1;
+        return $"Value: {increment(7)}";
+    }
+}
