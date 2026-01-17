@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace testing.Services;
 
 public interface ISyntaxNodeExamplesService
@@ -33,4 +36,10 @@ public interface ISyntaxNodeExamplesService
     string BreakContinueLoopExample(int[] items);
     string SwitchFallthroughGotoExample(int value);
     string TaskWhenAllExample();
+
+    string ForEachVariableStatementExample();
+    string SwitchStatementWithGuardsExample(object input);
+    Task<string> HttpClientCallExampleAsync();
+    Task<string> RefitCallExampleAsync();
+    Task<string> FlurlCallExampleAsync();
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using testing.Services;
 
 namespace testing.Controllers;
@@ -101,4 +102,28 @@ public class SyntaxNodeExamplesController : ControllerBase
     [HttpGet("task-when-all")]
     public IActionResult TaskWhenAllExample()
         => Ok(_examplesService.TaskWhenAllExample());
+
+    [HttpGet("foreach-variable")]
+    public IActionResult ForEachVariableStatementExample()
+        => Ok(_examplesService.ForEachVariableStatementExample());
+
+    [HttpGet("switch-guards/int/{value:int}")]
+    public IActionResult SwitchStatementWithGuardsIntExample(int value)
+        => Ok(_examplesService.SwitchStatementWithGuardsExample(value));
+
+    [HttpGet("switch-guards/string/{value}")]
+    public IActionResult SwitchStatementWithGuardsStringExample(string value)
+        => Ok(_examplesService.SwitchStatementWithGuardsExample(value));
+
+    [HttpGet("http-client")]
+    public async Task<IActionResult> HttpClientCallExampleAsync()
+        => Ok(await _examplesService.HttpClientCallExampleAsync());
+
+    [HttpGet("http-refit")]
+    public async Task<IActionResult> RefitCallExampleAsync()
+        => Ok(await _examplesService.RefitCallExampleAsync());
+
+    [HttpGet("http-flurl")]
+    public async Task<IActionResult> FlurlCallExampleAsync()
+        => Ok(await _examplesService.FlurlCallExampleAsync());
 }

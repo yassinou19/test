@@ -1,11 +1,23 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Flurl.Http;
+using testing.Interfaces;
 
 namespace testing.Services;
 
 public class SyntaxNodeExamplesService : ISyntaxNodeExamplesService
 {
     private static readonly object _gate = new();
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IApiService _apiService;
+
+    public SyntaxNodeExamplesService(IHttpClientFactory httpClientFactory, IApiService apiService)
+    {
+        _httpClientFactory = httpClientFactory;
+        _apiService = apiService;
+    }
 
     public string GotoStatementExample1()
     {
@@ -224,5 +236,71 @@ public class SyntaxNodeExamplesService : ISyntaxNodeExamplesService
 
         Task.WhenAll(A(), B()).GetAwaiter().GetResult();
         return "After";
+    }
+
+    public string ForEachVariableStatementExample()
+    {
+        var points = new List<(int X, int Y)> { (1, 2), (3, 4) };
+        var results = new List<string>();
+        foreach (var (x, y) in points)
+        {
+            results.Add($"Point: {x}, {y}");
+        }
+        return string.Join(" | ", results);
+    }
+
+    public string SwitchStatementWithGuardsExample(object input)
+    {
+        switch (input)
+        {
+            case int i when i > 10:
+                return "Large integer";
+            case int i:
+                return "Small integer";
+            case string s when s.Length > 5:
+                return "Long string";
+            default:
+                return "Default";
+        }
+    }
+
+    public async Task<string> HttpClientCallExampleAsync()
+    {
+        var client = _httpClientFactory.CreateClient();
+        try
+        {
+            var response = await client.GetAsync("https://www.google.com");
+            return $"Status: {response.StatusCode}";
+        }
+        catch (Exception ex)
+        {
+            return $"Error: {ex.Message}";
+        }
+    }
+
+    public async Task<string> RefitCallExampleAsync()
+    {
+        try
+        {
+            var response = await _apiService.GetHomePage();
+            return $"Refit Success: {response.Length} chars";
+        }
+        catch (Exception ex)
+        {
+            return $"Refit Error: {ex.Message}";
+        }
+    }
+
+    public async Task<string> FlurlCallExampleAsync()
+    {
+        try
+        {
+            var response = await "https://www.google.com".GetStringAsync();
+            return $"Flurl Success: {response.Length} chars";
+        }
+        catch (Exception ex)
+        {
+            return $"Flurl Error: {ex.Message}";
+        }
     }
 }

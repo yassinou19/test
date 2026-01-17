@@ -1,4 +1,6 @@
 using testing.Services;
+using Refit;
+using testing.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+builder.Services.AddHttpClient();
+builder.Services.AddRefitClient<IApiService>().ConfigureHttpClient(c => c.BaseAddress = new Uri("https://www.google.com"));
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<ISyntaxNodeExamplesService, SyntaxNodeExamplesService>();
