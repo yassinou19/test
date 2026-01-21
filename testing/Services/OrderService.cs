@@ -76,7 +76,7 @@ public class OrderService : IOrderService
             // Nested if-else
             if (order.Status == OrderStatus.Pending || order.Status == OrderStatus.Processing)
             {
-                // Return items to stock /
+                // Return items to stock 
                 foreach (var item in order.Items)
                 {
                     _inventoryService.UpdateStock(item.ProductId, item.Quantity);
