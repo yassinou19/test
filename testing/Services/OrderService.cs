@@ -50,6 +50,7 @@ public class OrderService : IOrderService
         {
             case OrderStatus.Pending:
                 order.Status = OrderStatus.Processing;
+                Console.WriteLine("OK");
                 return "Order is now being processed";
             
             case OrderStatus.Processing:
