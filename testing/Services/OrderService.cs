@@ -76,8 +76,6 @@ public class OrderService : IOrderService
             // Nested if-else
             if (order.Status == OrderStatus.Pending || order.Status == OrderStatus.Processing)
             {
-                order.Status = OrderStatus.Cancelled;
-                
                 // Return items to stock
                 foreach (var item in order.Items)
                 {
