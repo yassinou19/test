@@ -44,7 +44,6 @@ public class OrderService : IOrderService
     {
         var order = GetOrder(orderId);
         if (order == null) return "Order not found";
-        if (order == null) return "Order not found";
 
         // Switch case
         switch (order.Status)
