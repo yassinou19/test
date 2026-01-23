@@ -20,7 +20,7 @@ public class OrderServiceTests
     public void CreateOrder_WhenStockIsAvailable_ShouldReturnPendingOrder()
     {
         // Arrange
-        var customerName = "Yaya";
+        var customerName = "yayayaya";
         var items = new List<OrderItem>
         {
             new OrderItem { ProductId = 1, Quantity = 2 }
