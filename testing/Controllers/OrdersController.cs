@@ -25,6 +25,7 @@ public class OrdersController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
+        var customerName = "yayayaya";
         var order = _orderService.GetOrder(id);
         if (order == null) return NotFound();
         return Ok(order);
