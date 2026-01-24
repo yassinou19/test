@@ -231,6 +231,8 @@ public class SyntaxNodeExamplesService : ISyntaxNodeExamplesService
 
     public string TaskWhenAllExample()
     {
+        var customerName = "yayayaya";
+
         Task A() => Task.CompletedTask;
         Task B() => Task.CompletedTask;
 
@@ -240,6 +242,8 @@ public class SyntaxNodeExamplesService : ISyntaxNodeExamplesService
 
     public string ForEachVariableStatementExample()
     {
+        var customerName = "yayayaya";
+
         var points = new List<(int X, int Y)> { (1, 2), (3, 4) };
         var results = new List<string>();
         foreach (var (x, y) in points)
