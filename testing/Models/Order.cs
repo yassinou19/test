@@ -28,6 +28,7 @@ public class Order
 
 public class OrderItem
 {
+    //ok
     public int ProductId { get; set; }
     public int Quantity { get; set; }
 }
