@@ -20,6 +20,7 @@ public class InventoryService : IInventoryService
         }
         else
         {
+            //ok
             var product = _products.FirstOrDefault(p => p.Id == productId);
             
             // Nested if-else
