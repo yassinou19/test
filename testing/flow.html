@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramme de Séquence - React Flow</title>
+
+    <!-- 1. Styles CSS nécessaires -->
+    <!-- Tailwind CSS (pour le design) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React Flow CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/reactflow@11.10.1/dist/style.css" rel="stylesheet">
+
+    <!-- 2. Chargement des librairies (React, ReactDOM, ReactFlow) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- React Flow UMD -->
+    <script src="https://cdn.jsdelivr.net/npm/reactflow@11.10.1/dist/umd/reactflow.js"></script>
+    
+    <!-- 3. Babel (pour traduire le JSX dans le navigateur) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        /* Ajustements pour que l'app prenne tout l'écran */
+        body, html, #root { margin: 0; padding: 0; height: 100%; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <!-- 4. Votre code React ici -->
+    <script type="text/babel">
+        // --- RECUPERATION DES OBJETS GLOBAUX ---
+        // Comme nous n'avons pas de "import", on les récupère depuis window
+        const { useState, useMemo, useCallback } = React;
+        const { 
+            ReactFlow, 
+            Background, 
+            Controls, 
+            MarkerType, 
+            useNodesState, 
+            useEdgesState, 
+            applyEdgeChanges, 
+            applyNodeChanges 
+        } = window.ReactFlow;
+
+        // --- CONFIGURATION ---
+        const ACTOR_WIDTH = 180;
+        const ACTOR_HEIGHT = 50;
+        const COLUMN_GAP = 200;
+        const STEP_HEIGHT = 100;
+        const START_Y = 100;
+
+        // --- CUSTOM NODES ---
+        const ActorNode = ({ data }) => (
+            <div className="flex flex-col items-center">
+                <div 
+                    className="px-6 py-3 text-white rounded-lg font-bold shadow-lg border-2 border-blue-700 flex items-center justify-center relative z-10"
+                    style={{ backgroundColor: '#3b82f6', width: ACTOR_WIDTH, height: ACTOR_HEIGHT }}
+                >
+                    {data.label}
+                </div>
+                <div 
+                    className="absolute border-l-2 border-dashed border-gray-300" 
+                    style={{ 
+                        top: ACTOR_HEIGHT, 
+                        bottom: -data.lifelineHeight, 
+                        left: '50%', 
+                        zIndex: 0 
+                    }} 
+                />
+            </div>
+        );
+
+        const MessageNode = ({ data }) => (
+            <div className="px-3 py-2 bg-white rounded border border-gray-300 shadow-sm text-xs max-w-[200px] text-center z-20 hover:shadow-md transition-shadow">
+                <div className="font-semibold text-gray-800">{data.label}</div>
+                {data.description && (
+                    <div className="text-[10px] text-gray-500 mt-0.5">{data.description}</div>
+                )}
+            </div>
+        );
+
+        const nodeTypes = {
+            actor: ActorNode,
+            message: MessageNode,
+        };
+
+        // --- DATA ---
+        const actors = [
+            { id: 'user', label: '👤 Utilisateur' },
+            { id: 'frontend', label: '💻 Frontend' },
+            { id: 'backend', label: '⚙️ Backend' },
+            { id: 'database', label: '🗄️ Database' },
+        ];
+
+        const sequenceSteps = [
+            { id: 's1', from: 'user', to: 'frontend', label: 'Clic sur "Login"' },
+            { id: 's2', from: 'frontend', to: 'backend', label: 'POST /login', desc: '{email, pass}' },
+            { id: 's3', from: 'backend', to: 'backend', label: 'Hash password', type: 'internal' },
+            { id: 's4', from: 'backend', to: 'database', label: 'SELECT user' },
+            { id: 's5', from: 'database', to: 'backend', label: 'User Data', style: 'dashed' },
+            { id: 's6', from: 'backend', to: 'backend', label: 'Générer JWT', type: 'internal' },
+            { id: 's7', from: 'backend', to: 'frontend', label: '200 OK + Token', style: 'dashed' },
+            { id: 's8', from: 'frontend', to: 'frontend', label: 'Save localStorage', type: 'internal' },
+            { id: 's9', from: 'frontend', to: 'user', label: 'Redirect Dashboard', style: 'dashed' },
+        ];
+
+        // --- LOGIQUE DE LAYOUT ---
+        const getSequenceLayout = (actors, steps) => {
+            const nodes = [];
+            const edges = [];
+            
+            const actorXPositions = {};
+            actors.forEach((actor, index) => {
+                const x = index * (ACTOR_WIDTH + COLUMN_GAP);
+                actorXPositions[actor.id] = x;
+                const totalHeight = (steps.length * STEP_HEIGHT) + 50;
+
+                nodes.push({
+                    id: actor.id,
+                    type: 'actor',
+                    data: { label: actor.label, lifelineHeight: totalHeight },
+                    position: { x: x, y: 0 },
+                    draggable: false,
+                });
+            });
+
+            steps.forEach((step, index) => {
+                const y = START_Y + (index * STEP_HEIGHT);
+                const sourceX = actorXPositions[step.from];
+                const targetX = actorXPositions[step.to];
+                
+                const isSelf = step.from === step.to;
+                const midX = isSelf ? sourceX + (ACTOR_WIDTH / 2) + 40 : (sourceX + targetX) / 2;
+                
+                const nodeId = `node_${step.id}`;
+                
+                nodes.push({
+                    id: nodeId,
+                    type: 'message',
+                    data: { label: step.label, description: step.desc },
+                    position: { x: midX - 75, y: y },
+                });
+
+                edges.push({
+                    id: `e_${step.id}_source`,
+                    source: step.from,
+                    target: nodeId,
+                    type: 'straight',
+                    style: { 
+                        stroke: step.style === 'dashed' ? '#9ca3af' : '#3b82f6',
+                        strokeDasharray: step.style === 'dashed' ? '5,5' : '0',
+                        strokeWidth: 1.5
+                    },
+                });
+
+                edges.push({
+                    id: `e_${step.id}_target`,
+                    source: nodeId,
+                    target: step.to,
+                    type: 'straight',
+                    style: { 
+                        stroke: step.style === 'dashed' ? '#9ca3af' : '#3b82f6',
+                        strokeDasharray: step.style === 'dashed' ? '5,5' : '0',
+                        strokeWidth: 1.5
+                    },
+                    markerEnd: { 
+                        type: MarkerType.ArrowClosed, 
+                        color: step.style === 'dashed' ? '#9ca3af' : '#3b82f6' 
+                    },
+                });
+            });
+
+            return { nodes, edges };
+        };
+
+        // --- COMPOSANT PRINCIPAL ---
+        const SequenceDiagram = () => {
+            const layoutData = useMemo(() => getSequenceLayout(actors, sequenceSteps), []);
+            
+            const [nodes, setNodes] = useNodesState(layoutData.nodes);
+            const [edges, setEdges] = useEdgesState(layoutData.edges);
+
+            const onNodesChange = useCallback(
+                (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+                [setNodes]
+            );
+            const onEdgesChange = useCallback(
+                (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+                [setEdges]
+            );
+
+            return (
+                <div className="w-full h-full bg-gray-50 flex flex-col">
+                    <div className="p-4 bg-white border-b shadow-sm z-10">
+                        <h1 className="text-xl font-bold text-gray-800">Diagramme de Séquence (Single HTML File)</h1>
+                        <p className="text-sm text-gray-500">React Flow + Tailwind sans installation</p>
+                    </div>
+                    
+                    <div className="flex-grow h-full">
+                        <ReactFlow
+                            nodes={nodes}
+                            edges={edges}
+                            onNodesChange={onNodesChange}
+                            onEdgesChange={onEdgesChange}
+                            nodeTypes={nodeTypes}
+                            fitView
+                            minZoom={0.1}
+                            attributionPosition="bottom-right"
+                        >
+                            <Background color="#e5e7eb" gap={20} size={1} />
+                            <Controls />
+                        </ReactFlow>
+                    </div>
+
+                    <div className="fixed bottom-5 left-5 bg-white p-3 rounded shadow-lg border border-gray-200 text-xs text-gray-700">
+                        <div className="font-bold mb-2">Légende</div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <div className="w-6 h-0.5 bg-blue-500"></div>
+                            <span>Appel synchrone</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-6 h-0.5 border-t border-dashed border-gray-400"></div>
+                            <span>Réponse / Retour</span>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- RENDU DE L'APPLICATION ---
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<SequenceDiagram />);
+    </script>
+</body>
+</html>
