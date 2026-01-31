@@ -1,7 +1,7 @@
 ﻿services:
   backend:
     build:
-      context: ./testing
+      context: . 
       dockerfile: Dockerfile
     ports:
       - "8085:8089"   
