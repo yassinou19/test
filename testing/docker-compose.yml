@@ -1,7 +1,7 @@
 ﻿services:
   backend:
     build:
-      context: ./testing
+      context: ./
       dockerfile: Dockerfile
     ports:
       - "8085:8089"  # Host:Container
@@ -14,7 +14,7 @@
 
   frontend:
     build:
-      context: ./testing/client
+      context: ./client
       dockerfile: Dockerfile
     ports:
       - "3005:80"  # Host:Container (Nginx écoute sur 80)
