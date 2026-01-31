@@ -14,7 +14,7 @@
 
   frontend:
     build:
-      context: ./testing/client
+      context: ./client
       dockerfile: Dockerfile
     ports:
       - "3005:8087"
