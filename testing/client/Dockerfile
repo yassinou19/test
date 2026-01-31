@@ -9,5 +9,5 @@ RUN npm run build
 # Étape de production
 FROM nginx:stable-alpine
 COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 8087
+EXPOSE 3005
 CMD ["nginx", "-g", "daemon off;"]
