@@ -5,7 +5,6 @@
       dockerfile: Dockerfile
     ports:
       - "8085:8089"
-      - "7007:7007"
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - ASPNETCORE_URLS=${ASPNETCORE_URLS}
