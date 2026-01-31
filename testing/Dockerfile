@@ -12,4 +12,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 EXPOSE 8089
+ENV ASPNETCORE_URLS=http://+:8089
 ENTRYPOINT ["dotnet", "testing.dll"]

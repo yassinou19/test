@@ -1,23 +1,23 @@
 ﻿services:
   backend:
     build:
-      context: . 
+      context: ./testing
       dockerfile: Dockerfile
     ports:
-      - "8085:8089"
+      - "8085:8089"  # Host:Container
     environment:
-      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
-      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+      - ASPNETCORE_URLS=http://+:8089
     networks:
       - app-network
     restart: unless-stopped
 
   frontend:
     build:
-      context: ./client
+      context: ./testing/client
       dockerfile: Dockerfile
     ports:
-      - "3005:8087"
+      - "3005:80"  # Host:Container (Nginx écoute sur 80)
     environment:
       - VITE_API_URL=${VITE_API_URL}
     networks:
