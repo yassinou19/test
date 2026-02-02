@@ -1,5 +1,8 @@
 import { AppShell, Burger, Group, Button, Text, Container, Title, Paper, UnstyledButton, ActionIcon, Stack, Switch, Slider } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import SplitText from './components/Animations/SplitText';
+import ShinyText from './components/Animations/ShinyText';
+import { motion } from 'framer-motion';
 
 function App() {
   const [opened, { toggle }] = useDisclosure();
@@ -12,7 +15,7 @@ function App() {
         breakpoint: 'sm',
         collapsed: { desktop: true, mobile: !opened },
       }}
-      padding="0" // Remove default padding for full control
+      padding="0"
       styles={{
         main: {
           backgroundColor: 'var(--bg-primary)',
@@ -32,17 +35,32 @@ function App() {
         <Group h="100%" justify="space-between">
           <Group gap="xs">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" color="var(--text-primary)" />
-            <div style={{ backgroundColor: 'var(--accent-primary)', width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <motion.div 
+              initial={{ rotate: -90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              style={{ backgroundColor: 'var(--accent-primary)', width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
               <div style={{ width: 16, height: 16, backgroundColor: 'white', borderRadius: 2 }} />
-            </div>
-            <Title order={3} style={{ letterSpacing: '-0.5px' }}>Style Guide</Title>
+            </motion.div>
+            <Title order={3} style={{ letterSpacing: '-0.5px' }}>
+              <ShinyText text="Style Guide" speed={3} />
+            </Title>
           </Group>
 
           <Group visibleFrom="sm" gap="xl">
-            <UnstyledButton fw={500} c="var(--text-primary)" component="a" href="#">Colors</UnstyledButton>
-            <UnstyledButton fw={500} c="var(--text-secondary)" component="a" href="#">Type</UnstyledButton>
-            <UnstyledButton fw={500} c="var(--text-secondary)" component="a" href="#">UI Kit</UnstyledButton>
-            <UnstyledButton fw={500} c="var(--text-secondary)" component="a" href="#">Settings</UnstyledButton>
+            {['Colors', 'Type', 'UI Kit', 'Settings'].map((item, i) => (
+              <motion.div
+                key={item}
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.1 * i }}
+              >
+                <UnstyledButton fw={500} c={i === 0 ? "var(--text-primary)" : "var(--text-secondary)"} component="a" href="#">
+                  {item}
+                </UnstyledButton>
+              </motion.div>
+            ))}
             
             <ActionIcon variant="subtle" color="gray" size="lg">
               <span style={{ fontSize: 18 }}>🔍</span>
@@ -63,74 +81,74 @@ function App() {
       <AppShell.Main>
         <Container fluid p="xl" style={{ maxWidth: '1400px' }}>
           <Stack gap="xl">
-            <Group justify="space-between" align="center">
-              <div>
-                <Title order={2} mb={5}>COLOR PALETTE</Title>
-                <Text c="var(--text-secondary)" size="sm">v1.0.4</Text>
-              </div>
-            </Group>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Group justify="space-between" align="center">
+                <div>
+                  <Title order={2} mb={5}>
+                    <SplitText text="COLOR PALETTE" delay={50} />
+                  </Title>
+                  <Text c="var(--text-secondary)" size="sm">v1.0.4</Text>
+                </div>
+              </Group>
+            </motion.div>
 
             <Stack gap="md">
-              <Paper p="xl" radius="lg" bg="var(--bg-secondary)" style={{ border: '1px solid var(--border)' }}>
-                <Group justify="space-between">
-                  <Group gap="xl">
-                    <div style={{ width: 60, height: 60, backgroundColor: 'var(--accent-primary)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span style={{ fontSize: 24 }}>🎨</span>
-                    </div>
-                    <div>
-                      <Title order={4}>Accent Primary</Title>
-                      <Text c="var(--text-secondary)" size="sm">Main actions and key highlights.</Text>
-                    </div>
-                  </Group>
-                  <Text fw={700} ff="monospace" c="var(--text-secondary)">#581CFF</Text>
-                </Group>
-              </Paper>
-
-              <Paper p="xl" radius="lg" bg="var(--bg-secondary)" style={{ border: '1px solid var(--border)' }}>
-                <Group justify="space-between">
-                  <Group gap="xl">
-                    <div style={{ width: 60, height: 60, backgroundColor: '#030014', borderRadius: 12, border: '1px solid var(--border)' }} />
-                    <div>
-                      <Title order={4}>Base BG</Title>
-                      <Text c="var(--text-secondary)" size="sm">Deep space background for dark mode.</Text>
-                    </div>
-                  </Group>
-                  <Text fw={700} ff="monospace" c="var(--text-secondary)">#030014</Text>
-                </Group>
-              </Paper>
-
-              <Paper p="xl" radius="lg" bg="var(--bg-secondary)" style={{ border: '1px solid var(--border)' }}>
-                <Group justify="space-between">
-                  <Group gap="xl">
-                    <div style={{ width: 60, height: 60, backgroundColor: '#0B0720', borderRadius: 12, border: '1px solid var(--border)' }} />
-                    <div>
-                      <Title order={4}>Surface Card</Title>
-                      <Text c="var(--text-secondary)" size="sm">Secondary layers and card containers.</Text>
-                    </div>
-                  </Group>
-                  <Text fw={700} ff="monospace" c="var(--text-secondary)">#0B0720</Text>
-                </Group>
-              </Paper>
+              {[
+                { title: 'Accent Primary', desc: 'Main actions and key highlights.', color: 'var(--accent-primary)', hex: '#581CFF', icon: '🎨' },
+                { title: 'Base BG', desc: 'Deep space background for dark mode.', color: '#030014', hex: '#030014', icon: '🌌' },
+                { title: 'Surface Card', desc: 'Secondary layers and card containers.', color: '#0B0720', hex: '#0B0720', icon: '🎴' }
+              ].map((card, i) => (
+                <motion.div
+                  key={card.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <Paper p="xl" radius="lg" bg="var(--bg-secondary)" style={{ border: '1px solid var(--border)' }}>
+                    <Group justify="space-between">
+                      <Group gap="xl">
+                        <div style={{ width: 60, height: 60, backgroundColor: card.color, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', border: card.color === '#030014' ? '1px solid var(--border)' : 'none' }}>
+                          <span style={{ fontSize: 24 }}>{card.icon}</span>
+                        </div>
+                        <div>
+                          <Title order={4}>{card.title}</Title>
+                          <Text c="var(--text-secondary)" size="sm">{card.desc}</Text>
+                        </div>
+                      </Group>
+                      <Text fw={700} ff="monospace" c="var(--text-secondary)">{card.hex}</Text>
+                    </Group>
+                  </Paper>
+                </motion.div>
+              ))}
 
               <Group grow gap="md">
-                <Paper p="xl" radius="lg" bg="var(--bg-secondary)" style={{ border: '1px solid var(--border)', borderLeft: '4px solid var(--success)' }}>
-                  <Group>
-                    <div style={{ width: 20, height: 20, backgroundColor: 'var(--success)', borderRadius: 4 }} />
-                    <Stack gap={0}>
-                      <Text fw={700} size="sm">Success</Text>
-                      <Text size="xs" c="var(--text-secondary)">#1BB981</Text>
-                    </Stack>
-                  </Group>
-                </Paper>
-                <Paper p="xl" radius="lg" bg="var(--bg-secondary)" style={{ border: '1px solid var(--border)', borderLeft: '4px solid var(--error)' }}>
-                  <Group>
-                    <div style={{ width: 20, height: 20, backgroundColor: 'var(--error)', borderRadius: 4 }} />
-                    <Stack gap={0}>
-                      <Text fw={700} size="sm">Error</Text>
-                      <Text size="xs" c="var(--text-secondary)">#EF4444</Text>
-                    </Stack>
-                  </Group>
-                </Paper>
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
+                  <Paper p="xl" radius="lg" bg="var(--bg-secondary)" style={{ border: '1px solid var(--border)', borderLeft: '4px solid var(--success)' }}>
+                    <Group>
+                      <div style={{ width: 20, height: 20, backgroundColor: 'var(--success)', borderRadius: 4 }} />
+                      <Stack gap={0}>
+                        <Text fw={700} size="sm">Success</Text>
+                        <Text size="xs" c="var(--text-secondary)">#1BB981</Text>
+                      </Stack>
+                    </Group>
+                  </Paper>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+                  <Paper p="xl" radius="lg" bg="var(--bg-secondary)" style={{ border: '1px solid var(--border)', borderLeft: '4px solid var(--error)' }}>
+                    <Group>
+                      <div style={{ width: 20, height: 20, backgroundColor: 'var(--error)', borderRadius: 4 }} />
+                      <Stack gap={0}>
+                        <Text fw={700} size="sm">Error</Text>
+                        <Text size="xs" c="var(--text-secondary)">#EF4444</Text>
+                      </Stack>
+                    </Group>
+                  </Paper>
+                </motion.div>
               </Group>
             </Stack>
 
