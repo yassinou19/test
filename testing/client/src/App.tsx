@@ -1,4 +1,4 @@
-import { AppShell, Burger, Group, Button, Menu, Text, Container, Title, Paper, UnstyledButton, ActionIcon, Stack, Switch, Slider, Badge } from '@mantine/core';
+import { AppShell, Burger, Group, Button, Text, Container, Title, Paper, UnstyledButton, ActionIcon, Stack, Switch, Slider } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 function App() {
@@ -82,7 +82,7 @@ function App() {
                       <Text c="var(--text-secondary)" size="sm">Main actions and key highlights.</Text>
                     </div>
                   </Group>
-                  <Text fw={700} family="monospace" c="var(--text-secondary)">#581CFF</Text>
+                  <Text fw={700} ff="monospace" c="var(--text-secondary)">#581CFF</Text>
                 </Group>
               </Paper>
 
@@ -95,7 +95,7 @@ function App() {
                       <Text c="var(--text-secondary)" size="sm">Deep space background for dark mode.</Text>
                     </div>
                   </Group>
-                  <Text fw={700} family="monospace" c="var(--text-secondary)">#030014</Text>
+                  <Text fw={700} ff="monospace" c="var(--text-secondary)">#030014</Text>
                 </Group>
               </Paper>
 
@@ -108,7 +108,7 @@ function App() {
                       <Text c="var(--text-secondary)" size="sm">Secondary layers and card containers.</Text>
                     </div>
                   </Group>
-                  <Text fw={700} family="monospace" c="var(--text-secondary)">#0B0720</Text>
+                  <Text fw={700} ff="monospace" c="var(--text-secondary)">#0B0720</Text>
                 </Group>
               </Paper>
 
