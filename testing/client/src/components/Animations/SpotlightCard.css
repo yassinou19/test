@@ -1,0 +1,14 @@
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+}
+
+.spotlight-card-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0px;
+  transition: opacity 0.3s;
+}
