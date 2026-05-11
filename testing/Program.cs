@@ -1,6 +1,4 @@
-using testing.Services;
 using Refit;
-using testing.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
-builder.Services.AddRefitClient<IApiService>().ConfigureHttpClient(c => c.BaseAddress = new Uri("https://www.google.com"));
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
-builder.Services.AddScoped<ISyntaxNodeExamplesService, SyntaxNodeExamplesService>();
-builder.Services.AddScoped<testing.Interfaces.IListener<testing.Models.Order>, testing.Services.OrderNotificationListener>();
 
 var app = builder.Build();
 
